@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desa Wisata Tondok Banga' - Kesemestaan Budaya Toraja</title>
+    <meta name="description" content="Temukan keindahan autentik Toraja di Desa Wisata Tondok Banga', dengan rumah Tongkonan, upacara Rambu Solo, wisata alam, dan kuliner tradisional yang memukau.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2D4739, #4A90E2, #F39C12);
+            color: #2C3E50;
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background: url('https://placehold.co/1920x1080/556B2F/FFFFFF?text=Tongkonan+House+in+Tondok+Banga') parallax;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 71, 57, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .parallax {
+            background-attachment: fixed;
+        }
+
+        .slider {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            min-width: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .modal-content {
+            background-color: #f4f4f4;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Kalender */
+        .calendar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .calendar-day.event {
+            background: #f39c12;
+            color: white;
+        }
+
+        /* Galeri */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Testimoni */
+        .testimonial-slider {
+            display: flex;
+            position: relative;
+        }
+
+        .testimonial-item {
+            min-width: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .social-icon:hover {
+            color: #2980b9;
+        }
+
+        /* Chatbot */
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+        }
+
+        .chatbot.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(45deg, #3498db, #f39c12);
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chatbot-input {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .chatbot-input button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Toggle bahasa */
+        .lang-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Google Maps */
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            background: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3498db, #f39c12);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #2980b9, #e67e22);
+        }
+
+        /* Hide English elements by default */
+        .en { display: none; }
+
+        /* Show Indonesian elements by default */
+        .id { display: block; }
+
+        .language-active.id .en { display: none; }
+        .language-active.id .id { display: block; }
+        .language-active.en .en { display: block; }
+        .language-active.en .id { display: none; }
+    </style>
+</head>
+<body class="language-active id">
+    <button class="lang-toggle" onclick="toggleLanguage()">EN</button>
+
+    <header class="bg-white shadow-lg sticky top-0 z-50 backdrop-blur-md bg-white/90">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-indigo-800">Desa Wisata Tondok Banga'</h1>
+            <ul class="flex space-x-6">
+                <li><a href="#tentang" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 id">Tentang</a>
+                    <a href="#tentang" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 en">About</a></li>
+                <li><a href="#atraksi" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 id">Atraksi</a>
+                    <a href="#atraksi" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 en">Attractions</a></li>
+                <li><a href="#galeri" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 id">Galeri</a>
+                    <a href="#galeri" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 en">Gallery</a></li>
+                <li><a href="#event" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 id">Event</a>
+                    <a href="#event" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 en">Events</a></li>
+                <li><a href="#kontak" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 id">Kontak</a>
+                    <a href="#kontak" class="text-gray-700 hover:text-indigo-500 transition-colors duration-300 en">Contact</a></li>
+                <li><button onclick="openVirtualTour()" class="btn id">Virtual Tour</button>
+                    <button onclick="openVirtualTour()" class="btn en">Virtual Tour</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero" class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-text text-center">
+            <h2 class="text-6xl font-bold mb-6 drop-shadow-lg id">Kesemestaan Budaya Toraja</h2>
+            <h2 class="text-6xl font-bold mb-6 drop-shadow-lg en">Toraja Cultural Paradise</h2>
+            <p class="text-2xl mb-8 opacity-90 id">Jelajahi misteri rumah Tongkonan, ritus Rambu Solo, dan keanekaragaman alam Toraja di Desa Wisata Tondok Banga'.</p>
+            <p class="text-2xl mb-8 opacity-90 en">Explore the mysteries of Tongkonan houses, Rambu Solo rituals, and Toraja's natural diversity in Tondok Banga' Tourism Village.</p>
+            <img src="https://placehold.co/1024x768/556B2F/FFFFFF?text=Tongkonan+House+in+Tondok+Banga" alt="Pemandangan spektakuler rumah adat Tongkonan khas Toraja dengan atap pelana tinggi melengkung seperti tanduk banteng, dinding kayu ulin berukir detail pola geometris dan totem leluhur Puang Matua, berada di tengah desa Tondok Banga' dengan pohon palem dan gunung hijau berlatar, suasana pagi dengan cahaya matahari yang memantul di ukiran kain sarita tipico, menampilkan warna merah dan hitam tradisional" class="mx-auto rounded-2xl shadow-2xl max-w-md parallax" />
+        </div>
+    </section>
+
+    <section id="tentang" class="py-20 bg-gradient-to-br from-teal-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in id">Tentang Kami</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in en">About Us</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="fade-in visible">
+                    <p class="mb-6 text-lg leading-relaxed id">Desa Wisata Tondok Banga' berada di jantung Kabupaten Tana Toraja, Sulawesi Selatan. Dengan perbukitan yang menjulang tinggi dan udara sejuk, kami tawarkan pengalaman mendalam budaya Toraja. Di sini, tradisi dan alam bersatu: nikmati keramahan penduduk, saksikan upacara Rambu Solo yang monumental, dan rasakan kedamaian di rumah Tongkonan.</p>
+                    <p class="mb-6 id">Temukan atraksi unik seperti atraksi patauku (lari cepat dengan bambu), pesta ayam berkokok, dan homestay yang autentik. Kami berkomitmen melestarikan adat istiadat leluhur sambil menyambut wisatawan dari dunia.</p>
+                    <p class="mb-6 text-lg leading-relaxed en">Located in the heart of Tana Toraja Regency, South Sulawesi, Tondok Banga' Tourism Village offers deep cultural experiences amidst towering hills and cool air. Here tradition meets nature: enjoy the hospitality of the locals, witness monumental Rambu Solo ceremonies, and feel peace in Tongkonan houses.</p>
+                    <p class="mb-6 en">Discover unique attractions like the patauku (fast bambo running), chicken crowing parties, and authentic homestays. We are committed to preserving ancestral customs while welcoming global visitors.</p>
+                </div>
+                <div class="card p-8 rounded-2xl">
+                    <img src="https://placehold.co/800x600/228B22/FFFFFF?text=Traditional+Tongkonan+Homestay" alt="Interior rumah Tongkonan autentik di Tondok Banga' dengan lantai kayu halus, dinding hiasan kain tenun sarita berwarna merah dan hitam dengan motif palo dan menyang dengan gambar tokoh puang matua dan pa'potinge, furniture kayu ukir bagi aturu akik, bibir sumange berkokok dengan tali afl編集, suasana dalam ruangan gelap dengan cahaya remang api unggun" class="w-full h-64 object-cover rounded-xl mb-4" />
+                    <h4 class="text-2xl font-semibold mb-4 text-center id">Homestay Tongkonan</h4>
+                    <h4 class="text-2xl font-semibold mb-4 text-center en">Tongkonan Homestay</h4>
+                    <p class="text-center id">Rasakan kenyamanan tinggal di rumah tradisional dengan cerita rakyat yang hidup melalui ukiran-ukiran kayu.</p>
+                    <p class="text-center en">Experience staying in traditional houses with living folklore through intricate wood carvings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="atraksi" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible id">Atraksi Unggulan</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible en">Featured Attractions</h3>
+            <div class="slider" id="toraja-slider">
+                <div class="slide active">
+                    <img src="https://placehold.co/1200x800/E74C3C/FFFFFF?text=Rambu+Solo+Ceremony+in+Tondok+Banga" alt="Upacara Rambu Solo di Tondok Banga' Toraja dengan keluarga adu tangis sambil memeluk tongkat ka'e dan kain pancholo, kerbau sebagai kurban menarik perhatian dengan tanduk besar dan badan putih hitam, masyarakat berkumpul berdiri dan duduk di tanah memakai pirates lonteses belang hitam merah, dengan patung tau-tau (patung orang) di balak lante lokasi pemakaman, suasana duka cita dan solidaritas komunal di bawah langit biru pegunungan" class="w-full h-96 object-cover rounded-2xl shadow-lg" />
+                </div>
+                <div class="slide">
+                    <img src="https://placehold.co/1200x800/27AE60/FFFFFF?text=Waterfall+Hike+in+Tondok+Banga" alt="Air terjun spektakuler di sekitar Tondok Banga' Toraja dengan aliran air putih seperti air garem jatuh dari tebing hijau lumut, pohon besar dan akar berliku, burung dan monyet liar terlihat, sungai berkelok dengan batu-batu besar halus dari vulkanik, kabut tipis pagi menambah misteri alam Toraja yang indah" class="w-full h-96 object-cover rounded-2xl shadow-lg" />
+                </div>
+                <div class="slide">
+                    <img src="https://placehold.co/1200x800/F1C40F/FFFFFF?text=Toraja+Cuisine+Cooking+in+Tondok+Banga" alt="Masakan kuliner autentik Toraja seperti Pallu Butung (ayam goreng dengan sambal rica dari buah cabe dan daun jeruk purut) di atas meja kayu rimbun, dengan ayam Gowa, ikan asin asin makin panteles, nasi pa'parrang (nasi ketan), kopi ala Toraja, dan buah langsat, suasana familier keluarga desa memasak di dapur tradisional" class="w-full h-96 object-cover rounded-2xl shadow-lg" />
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="prevBtn" class="btn id">Sebelumnya</button>
+                <button id="prevBtn" class="btn en">Previous</button>
+                <button id="nextBtn" class="btn id">Selanjutnya</button>
+                <button id="nextBtn" class="btn en">Next</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="card p-8 rounded-2xl cursor-pointer" onclick="openModal('Rambu Solo', 'Ritual pemakaman kuno yang menyatukan kehidupan dan kematian. Saksikan tau-tau, kurban kerbau, dan doa leluhur di lokasi pemakaman.', 'This ancient burial ritual that unites life and death. Watch tau-tau, buffalo sacrifices, and ancestor prayers at the burial site.')">
+                    <img src="https://placehold.co/600x400/DC143C/FFFFFF?text=Rambu+Solo+Ritual+in+Tondok+Banga" alt="Detail upacara Rambu Solo dengan tau-tau patung kecil orang berpakaian adat Toraja di rumah kecil kayu lante sebagai tempat arwah, babi dan kerbau kurban dengan darah menciprat di tanah liat merah, masyarakat laki-laki dan perempuan berjemur di matahari sambil makan nasi jambal dengan tangan, musik gambus dan aMarshall gambus memainkan lagu sedih tradisional" class="w-full h-48 object-cover rounded-xl mb-4" />
+                    <h4 class="text-xl font-semibold mb-2 text-center id">Rambu Solo'</h4>
+                    <h4 class="text-xl font-semibold mb-2 text-center en">Rambu Solo Ritual</h4>
+                    <p class="text-center id">Ritual pemakaman spektakuler yang menggambarkan siklus hidup manusia di budaya Toraja.</p>
+                    <p class="text-center en">Spectacular burial ritual depicting the human life cycle in Toraja culture.</p>
+                </div>
+                <div class="card p-8 rounded-2xl cursor-pointer" onclick="openModal('Wisata Alam', 'Trek ke gunung tinggi, air terjun eksotis, dan hutan yang rimbun. Rasakan keindahan alam Sulawesi Selatan yang belum tersentuh.', 'Hike to high mountains, exotic waterfalls, and lush forests. Experience the untouched natural beauty of South Sulawesi.')">
+                    <img src="https://placehold.co/600x400/32CD32/FFFFFF?text=Nature+Hiking+in+Tondok+Banga" alt="Jalur trekking alam di Tondok Banga' dengan gunung-gunung tinggi berlatar, jalan setapak berlumut dengan akar pohon besar, sungai kecil berkelok, lumpur halus vulkanik, pohon pinus dan kelapa, burung cendrawasih kecil terbang di angkasa biru, suasana sejuk hutan tropis dengan kabut tipis" class="w-full h-48 object-cover rounded-xl mb-4" />
+                    <h4 class="text-xl font-semibold mb-2 text-center id">Wisata Alam</h4>
+                    <h4 class="text-xl font-semibold mb-2 text-center en">Nature Tourism</h4>
+                    <p class="text-center id">Jelajahi perbukitan dan air terjun Toraja dengan panduan lokal.</p>
+                    <p class="text-center en">Explore Toraja's hills and waterfalls with local guides.</p>
+                </div>
+                <div class="card p-8 rounded-2xl cursor-pointer" onclick="openModal('Kuliner Khas', 'Cicipi hidangan autentik seperti Pallu Butung, ayam Gowa, dan nasi pa\'parrang. Temukan rasa rempah khas Sulawesi.', 'Taste authentic dishes like Pallu Butung, ayam Gowa, and nasi pa\'parrang. Discover the unique spice flavors of Sulawesi.')">
+                    <img src="https://placehold.co/600x400/FFD700/FFFFFF?text=Toraja+Cuisine+Cooking+Class+in+Tondok+Banga" alt="Pelajaran memasak kuliner Toraja di dapur rumah Tongkonan dengan wajan besar besi panas, bahan daging ayam dan bumbu seperti cabe rawit, bawang merah, kunyit, daun jeruk purut, pala, langsing dengan daging serai dan laos, meja konspiraptic dengan piring kaca tradisional, penduduk wanita memasak sambil bercerita legenda rakyat" class="w-full h-48 object-cover rounded-xl mb-4" />
+                    <h4 class="text-xl font-semibold mb-2 text-center id">Kuliner Khas</h4>
+                    <h4 class="text-xl font-semibold mb-2 text-center en">Local Cuisine</h4>
+                    <p class="text-center id">Jelajahi cita rasa unik rempah Toraja melalui kelas memasak interaktif.</p>
+                    <p class="text-center en">Explore unique Toraja spice flavors through interactive cooking classes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeri" class="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible id">Galeri Foto</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible en">Photo Gallery</h3>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal('Tongkonan House', 'Rumah adat tradisional Toraja yang indah dengan arsitektur unik berbentuk perahu.', 'Beautiful traditional Toraja house with unique boat-shaped architecture.')">
+                    <img src="https://placehold.co/400x300/8B4513/FFFFFF?text=Tongkonan+Rooftop" alt="Atap rumah Tongkonan Toraja dari ketinggian, menunjukkan pola pelana melengkung tinggi, kayu ulin kuat dengan detail ukiran geometris dan hewan mitoloji, dikelilingi pohon palem tinggi di bawah langit biru terang, sinar matahari memantul pada kayu gelap" class="gallery-img" />
+                </div>
+                <div class="gallery-item" onclick="openModal('Rambu Solo Ceremony', 'Upacara adat yang megah di balak lante dengan tau-tau menari.', 'Magnificent traditional ceremony at the grave site with tau-tau statues.')">
+                    <img src="https://placehold.co/400x300/228B22/FFFFFF?text=Tau+Tau+Statues" alt="Patung tau-tau Toraja di balak lante pemakaman dengan serangkaian patung orang kecil kayu berpakaian adat merah hitam berdiri berdampingan, beberapa dengan topi cono hitam, pohon besar dan lapangan terbuka berlatar, sinar matahari sore" class="gallery-img" />
+                </div>
+                <div class="gallery-item" onclick="openModal('Nature Beauty', 'Pegunungan hijau dan air terjun yang menyejukkan di sekitar desa.', 'Green mountains and refreshing waterfalls around the village.')">
+                    <img src="https://placehold.co/400x300/4169E1/FFFFFF?text=Toraja+Hills" alt="Pemandangan pegunungan hijau tinggi di Tondok Banga' dengan formasi batuan vulkanik besar, pohon besar dengan akar berliku, sungai kecil mengalir di bawah tebing, kabut pagi menyelimuti lereng, langit biru di atas" class="gallery-img" />
+                </div>
+                <div class="gallery-item" onclick="openModal('Local Culture', 'Tari tradisional Toraja dengan musik tribal.', 'Traditional Toraja dance with tribal music.')">
+                    <img src="https://placehold.co/400x300/FF1493/FFFFFF?text=Traditional+Dance" alt="Penari wanita Toraja dalam tari dekoratif berkelilingan dengan langkah ringan di tengah atas kayu, pakaian lembeka hitam merah dengan motif sarita complicati, ukiran bulu ikan, hiasan kepala besar dan payud mori, musik suling biru latar belakang langit cerah" class="gallery-img" />
+                </div>
+                <div class="gallery-item" onclick="openModal('Food Fest', 'Pelbagai hidangan kuliner Toraja yang lezat.', 'Various delicious Toraja culinary dishes.')">
+                    <img src="https://placehold.co/400x300/FF6347/FFFFFF?text=Toraja+Cuisine" alt="Beragam makanan Toraja seperti babi panggang dengan sambal rica merah, ayam goreng dengan kuah Pejaan, ikan asin pante dengan serai dan lengkuas, nasi parattari dengan cabai hijau, langsat kuning manis di pinggir piring" class="gallery-img" />
+                </div>
+                <div class="gallery-item" onclick="openModal('Buffalo Sacrifice', 'Kerbau yang disiapkan untuk upacara adat.', 'Buffalo prepared for traditional ceremony.')">
+                    <img src="https://placehold.co/400x300/8B0000/FFFFFF?text=Buffalo+Sacrifice" alt="Kerbau Toraja besar berwarna putih hitam dengan tanduk melengkung ke belakang, dikawal oleh petani dalam pakaian adat, tali tegu kuropat untuk diperas, tanah liar berbumput hijau ingter, langit pagi biru" class="gallery-img" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 id">Temukan Lokasi Kami</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 en">Find Our Location</h3>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible id">Testimoni Pengunjung</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible en">Visitor Testimonials</h3>
+            <div class="testimonial-slider">
+                <div class="testimonial-item card p-8 rounded-2xl">
+                    <p class="text-lg mb-4 id">"Pengalaman tak terlupakan! Budaya Toraja sungguh kaya dan hidup. Homestay Tongkonan sangat autentik."</p>
+                    <p class="text-lg mb-4 en">"Unforgettable experience! Toraja culture is so rich and alive. The Tongkonan homestay was so authentic."</p>
+                    <p class="text-right font-semibold">— Ahmad, Jakarta</p>
+                </div>
+                <div class="testimonial-item card p-8 rounded-2xl">
+                    <p class="text-lg mb-4 id">"Pertunjukan Rambu Solo nya sangat emosional. Akan kembali lagi untuk wisata alamnya yang indah."</p>
+                    <p class="text-lg mb-4 en">"The Rambu Solo performance was so emotional. Will come back for its beautiful nature tourism."</p>
+                    <p class="text-right font-semibold">— Sari, Bandung</p>
+                </div>
+                <div class="testimonial-item card p-8 rounded-2xl">
+                    <p class="text-lg mb-4 id">"Kuliner Toraja luar biasa! Pallu Butung sangat bumbu ketu dan rasa lembut.</p>
+                    <p class="text-lg mb-4 en">"Toraja cuisine is amazing! Pallu Butung has rich spices and tender taste."</p>
+                    <p class="text-right font-semibold">— Reni, Surabaya</p>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="prevTestBtn" class="btn">⟨</button>
+                <button id="nextTestBtn" class="btn">⟩</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="event" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible id">Kalender Event</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible en">Event Calendar</h3>
+            <div class="calendar card p-6">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="btn">⟨</button>
+                    <h4 id="monthYear" class="text-xl font-bold">Januari 2025</h4>
+                    <button id="nextMonth" class="btn">⟩</button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day font-bold id">Ming</div>
+                    <div class="calendar-day font-bold id">Sen</div>
+                    <div class="calendar-day font-bold id">Sel</div>
+                    <div class="calendar-day font-bold id">Rab</div>
+                    <div class="calendar-day font-bold id">Kam</div>
+                    <div class="calendar-day font-bold id">Jum</div>
+                    <div class="calendar-day font-bold id">Sab</div>
+                    <div class="calendar-day font-bold en">Sun</div>
+                    <div class="calendar-day font-bold en">Mon</div>
+                    <div class="calendar-day font-bold en">Tue</div>
+                    <div class="calendar-day font-bold en">Wed</div>
+                    <div class="calendar-day font-bold en">Thu</div>
+                    <div class="calendar-day font-bold en">Fri</div>
+                    <div class="calendar-day font-bold en">Sat</div>
+                    <!-- Days will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontak" class="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible id">Hubungi Kami untuk Pengalaman Unik</h3>
+            <h3 class="text-4xl font-bold text-center mb-12 fade-in visible en">Contact Us for a Unique Experience</h3>
+            <form class="max-w-lg mx-auto card p-10 rounded-2xl" onsubmit="handleSubmit(event)">
+                <div class="mb-6">
+                    <label for="nama" class="block text-lg font-medium mb-2 id">Nama Lengkap</label>
+                    <label for="nama" class="block text-lg font-medium mb-2 en">Full Name</label>
+                    <input type="text" id="nama" class="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+                </div>
+                <div class="mb-6">
+                    <label for="email" class="block text-lg font-medium mb-2">Email</label>
+                    <input type="email" id="email" class="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+                </div>
+                <div class="mb-6">
+                    <label for="pesan" class="block text-lg font-medium mb-2 id">Pesan atau Pertanyaan</label>
+                    <label for="pesan" class="block text-lg font-medium mb-2 en">Message or Question</label>
+                    <textarea id="pesan" class="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn w-full text-xl">Kirim Pesan</button>
+                <button type="submit" class="btn w-full text-xl en" style="display: none;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="social-icons py-10">
+        <a href="https://facebook.com" class="social-icon">f</a>
+        <a href="https://instagram.com" class="social-icon">i</a>
+        <a href="https://twitter.com" class="social-icon">t</a>
+    </div>
+
+    <footer>
+        <p class="text-xl id">© 2025 Desa Wisata Tondok Banga'. Melestarikan Budaya Toraja untuk Dunia.</p>
+        <p class="text-xl en">© 2025 Tondok Banga' Tourism Village. Preserving Toraja Culture for the World.</p>
+        <p class="text-lg id">Kabupaten Tana Toraja, Sulawesi Selatan, Indonesia</p>
+        <p class="text-lg en">Tana Toraja Regency, South Sulawesi, Indonesia</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" class="text-2xl font-bold mb-4"></h2>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <button onclick="toggleChatbot()" class="btn" style="position: fixed; bottom: 20px; right: 20px;">💬</button>
+
+    <div id="chatbot" class="chatbot">
+        <div class="chatbot-header">
+            <span class="id">Chat Bot Toraja</span>
+            <span class="en">Toraja Chat Bot</span>
+        </div>
+        <div class="chatbot-messages">
+            <p id="bot-message" class="id">Halo! Bagaimana saya dapat membantumu dengan informasi tentang Toraja?</p>
+            <p id="bot-message" class="en" style="display: none;">Hello! How can I help you with information about Toraja?</p>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chat-input" placeholder="Ketik pesan Anda..." required>
+            <button onclick="sendMessage()">Kirim</button>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQsIRESQwQyWnA_QBvGCSJ4QgLVWDZJX8&callback=initMap&libraries=&v=weekly" async></script>
+    <script>
+        // Global Variables
+        let currentLanguage = 'id';
+        let currentSlide = 0;
+        let currentTestimonial = 0;
+        let currentYear = 2025;
+        let currentMonth = new Date(2025, 0).getMonth(); // January 2025
+        const slides = document.querySelectorAll('.slide');
+        const testimonials = document.querySelectorAll('.testimonial-item');
+        const totalSlides = slides.length;
+        const totalTestimonials = testimonials.length;
+
+        // Initialize Google Maps for Tana Toraja
+        function initMap() {
+            const tanaTorajaCoords = { lat: -3.0833, lng: 119.8333 }; // Approximate Tana Toraja coordinates
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: tanaTorajaCoords,
+                zoom: 11,
+                scrollwheel: false,
+                gestureHandling: "cooperative"
+            });
+            const marker = new google.maps.Marker({
+                position: tanaTorajaCoords,
+                map: map,
+                title: "Desa Wisata Tondok Banga', Tana Toraja"
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                content: '<div><h4>Desa Wisata Tondok Banga\'</h4><p>Kabupaten Tana Toraja, Sulawesi Selatan</p><p>Menawarkan pengalaman wisata budaya autentik di jantung Toraja.</p></div>'
+            });
+            marker.addListener('click', () => {
+                infoWindow.open(map, marker);
+            });
+        }
+
+        // Toggle Language
+        function toggleLanguage() {
+            document.body.classList.toggle('language-active');
+            currentLanguage = currentLanguage === 'id' ? 'en' : 'id';
+            document.querySelector('.lang-toggle').textContent = currentLanguage === 'id' ? 'EN' : 'ID';
+            document.getElementById('bot-message').textContent = currentLanguage === 'id' ? 'Halo! Bagaimana saya dapat membantumu dengan informasi tentang Toraja?' : 'Hello! How can I help you with information about Toraja?';
+        }
+
+        // Intersection Observer
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Slider Functions
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide % totalSlides) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentSlide++;
+            updateSlide();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentSlide--;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            updateSlide();
+        });
+
+        setInterval(() => {
+            currentSlide++;
+            updateSlide();
+        }, 5000);
+
+        // Testimonial Slider
+        function updateTestimonial() {
+            testimonials.forEach((testimonial, index) => {
+                testimonial.style.display = index === currentTestimonial ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('nextTestBtn').addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+            updateTestimonial();
+        });
+
+        document.getElementById('prevTestBtn').addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+            updateTestimonial();
+        });
+
+        updateTestimonial();
+
+        // Modal Functions
+        function openModal(title, description) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-description').textContent = description;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Virtual Tour and Chatbot
+        function openVirtualTour() {
+            alert('Fitur Virtual Tour sedang dalam pengembangan. Segera hadir untuk pengalaman imersif Toraja!');
+        }
+
+        function toggleChatbot() {
+            document.getElementById('chatbot').classList.toggle('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value;
+            if (message.trim()) {
+                const messagesDiv = document.querySelector('.chatbot-messages');
+                const newMessage = document.createElement('p');
+                newMessage.textContent = `Anda: ${message}`;
+                messagesDiv.appendChild(newMessage);
+                input.value = '';
+
+                // Simple bot response
+                setTimeout(() => {
+                    const botResponse = getBotResponse(message, currentLanguage);
+                    const botMessage = document.createElement('p');
+                    botMessage.textContent = `Bot: ${botResponse}`;
+                    messagesDiv.appendChild(botMessage);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function getBotResponse(message, lang) {
+            const responses = {
+                id: {
+                    'halo': 'Halo! Apa yang bisa saya bantu tentang Toraja?',
+                    'ramps solo': 'Rambu Solo adalah upacara pemakaman tradisional Toraja yang sangat penting.',
+                    'tongkonan': 'Tongkonan adalah rumah adat Toraja dengan arsitektur berbentuk perahu.',
+                    'default': 'Maaf, saya tidak mengerti. Silakan ajukan pertanyaan tentang wisata atau budaya Toraja.'
+                },
+                en: {
+                    'hello': 'Hello! How can I help you with information about Toraja?',
+                    'rambu solo': 'Rambu Solo is the traditional Toraja burial ceremony that is very important.',
+                    'tongkonan': 'Tongkonan is the traditional Toraja house with boat-shaped architecture.',
+                    'default': 'Sorry, I don\'
